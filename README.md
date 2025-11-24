@@ -6,3 +6,9 @@
 - Python layout: `pytaxel/eric` (ctypes loader/types/errors/facade for ERiC), `pytaxel/ebilanz` (CSV→model→XBRL logic mirroring Rust taxel), `pytaxel/cli` (commands matching taxel CLI for generate/validate/send/preview).
 - Workflow alignment: mirror Rust `taxel` commands and data expectations so fixtures/templates stay shared; keep raw ctypes isolated inside `pytaxel.eric` and surface high-level helpers to CLI/web layers.
 - Security/paths: certificates and PINs supplied via CLI/env (no repo storage), manufacturer ID placeholder only for tests; logging directed to user-specified directory alongside ERiC log output.
+
+## CLI Usage
+- Generate XML: `python -m pytaxel.cli.main generate --csv-file taxel/test_data/taxonomy/v6.5/sample.csv --template-file taxel/templates/elster_v11/taxonomy_v6.5/ebilanz.xml --output-file /tmp/ebilanz.xml`
+- Validate XML: `python -m pytaxel.cli.main validate --xml-file /tmp/ebilanz.xml --tax-type Bilanz --tax-version 6.5 --log-dir /tmp/eric-logs [--print /tmp/preview.pdf]`
+- Send XML: `python -m pytaxel.cli.main send --xml-file /tmp/ebilanz.xml --tax-type Bilanz --tax-version 6.5 --certificate /path/to/cert.pfx --pin 123456 [--print /tmp/confirmation.pdf] [--log-dir /tmp/eric-logs]`
+- Add `--debug` to any command to log resolved paths and ERiC responses.
