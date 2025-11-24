@@ -115,6 +115,7 @@ Deliverable (M0)
 Agent checklist (M0 – Orientation & architecture)
 - Before you start:
   - Do not create or modify code (other than `docs/architecture.md` or this plan).
+  - Create (or append to) `agents_log.md` to record what you read, key findings, and open questions.
   - Make sure ERiC documentation files and the `taxel/` and `eric-rs/` repos are present.
 - While working:
   - Read the three ERiC docs listed above and skim the ERiC Python demo.
@@ -172,6 +173,7 @@ Deliverable (M1)
 Agent checklist (M1 – Foundations & data flow)
 - Before you start:
   - Read `docs/architecture.md` (or the M0 section) so you follow the agreed structure.
+  - Update `agents_log.md` with what you plan to scaffold and any questions to carry forward.
 - While working:
   - Create the `pytaxel/` package and the subpackages `eric/`, `ebilanz/`, `cli/`, `web/`.
   - In each package, create minimal `__init__.py` and stub modules (`loader.py`, `types.py`, `facade.py`, etc.) with docstrings and TODOs.
@@ -262,6 +264,7 @@ Deliverable (M2)
 Agent checklist (M2 – Python ERiC wrapper)
 - Before you start:
   - Confirm that M1 structure exists and imports without errors.
+  - Note in `agents_log.md` the test XMLs and ERiC paths you will use.
 - While working:
   - Implement `pytaxel/eric/loader.py` to locate and load ERiC libraries using `ERIC_HOME`/`PLUGIN_PATH`.
   - Implement `pytaxel/eric/types.py` with only the structs/enums needed for validate/preview/send.
@@ -297,6 +300,7 @@ Deliverable (M2a)
 Agent checklist (M2a – Walking skeleton)
 - Before you start:
   - Ensure M2 example and tests are passing.
+  - Note in `agents_log.md` which demo XML and cert (if any) you will use.
 - While working:
   - Choose one known-good demo XML (from ERiC docs or test data) and hard-code its path in a small script/command.
   - Use `eric_session()` to:
@@ -349,6 +353,7 @@ Deliverable (M3)
 Agent checklist (M3 – eBilanz data & template port)
 - Before you start:
   - Confirm M2/M2a wrapper and walking skeleton work and are not being changed in this step.
+  - Log in `agents_log.md` which templates/mappings and fixtures you will compare against.
 - While working:
   - Analyze `taxel-xml` and document the mapping rules and template usage for eBilanz.
   - Design and implement a Python data model in `pytaxel/ebilanz/` that can represent the required eBilanz structures.
@@ -401,6 +406,7 @@ Deliverable (M4)
 Agent checklist (M4 – CLI)
 - Before you start:
   - Ensure M2/M2a (ERiC wrapper) and M3 (CSV/XML generation) are stable.
+  - Record in `agents_log.md` the CLI commands and fixtures you will test.
 - While working:
   - Design the CLI commands and options to mirror `taxel` (at least: `generate`, `validate`, `send`, optionally `extract`).
   - Implement the CLI using the existing library functions from `pytaxel/eric` and `pytaxel/ebilanz` (no duplicated logic in the CLI layer).
@@ -452,6 +458,7 @@ Deliverable (M5)
 Agent checklist (M5 – Web app)
 - Before you start:
   - Verify that CLI/library flows from M4 are stable and documented.
+  - Note in `agents_log.md` the planned endpoints and e2e flows to cover.
 - While working:
   - Implement backend endpoints that call into the same library functions used by the CLI (no duplicated business logic).
   - Ensure each HTTP request uses a fresh `eric_session()` so ERiC state (including logs) is isolated per request.
