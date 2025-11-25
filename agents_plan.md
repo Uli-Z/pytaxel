@@ -550,6 +550,43 @@ Deliverable (M6)
 - up‑to‑date documentation for developers and technical users,
 - agreed follow‑up roadmap (e.g., platform extensions, additional tax types).
 
+M7 – Web UI parity & CLI alignment
+----------------------------------------------------------------------
+
+Goal  
+Adapt the web UI/backend so that it mirrors the updated CLI behavior (including M4a parity changes) with ≥99% functional match to Rust `taxel`.
+
+Tasks
+- API/behavior alignment:
+  - expose `extract`, `generate`, `validate`, `send` endpoints with the same defaults/flags as the CLI,
+  - propagate tax-type/version defaults and allowed values,
+  - support `--print` equivalents (preview for validate, confirmation for send) and log-dir handling consistent with CLI.
+- Output/log parity:
+  - persist validation/server responses to the same filenames/locations used by CLI (per-request temp/log dir),
+  - return ERiC codes and messages in responses mirroring CLI output semantics.
+- Config & security:
+  - honor the same env/config options (e.g., ERIC_HOME override, certificate/PIN env vars) without leaking secrets,
+  - ensure request isolation for ERiC state and temp files.
+- Tests:
+  - add e2e/API tests comparing outputs/log artifacts against CLI behavior for shared fixtures,
+  - cover the new `extract` flow and print/preview options.
+- UX updates:
+  - update UI labels/help to reflect new commands/flags/defaults.
+
+Deliverable (M7)
+- Web UI and API that behave like the parity-updated CLI for the core flows, with tests demonstrating matching outputs/logs.
+
+Agent checklist (M7 – Web UI parity)
+- Before you start:
+  - Record current web vs. CLI deltas in `agents_log.md`.
+- While working:
+  - Align endpoints/params/defaults with the CLI parity spec.
+  - Ensure response/log file handling matches CLI conventions.
+  - Update UI/help text accordingly.
+  - Add e2e/API tests covering extract/generate/validate/send with print/preview variants.
+- You are done with M7 when:
+  - web interactions produce the same observable results (including log files and ERiC codes) as the parity CLI for reference fixtures/tests.
+
 Notes for contributors
 ----------------------
 - Never commit ERiC headers or binaries beyond what already exists under `ERiC/`.

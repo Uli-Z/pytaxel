@@ -176,3 +176,25 @@ Once you have successfully completed this milestone, create one or more Git comm
 - Use the Conventional Commits format (e.g., `test: ...`, `style: ...`, `chore(release): ...`).
 - If the milestone involved multiple distinct changes, consider creating separate, logical commits for tests, linting, and packaging setup.
 - Your commit message(s) should clearly describe the work you have done for this milestone.
+
+---
+
+## Prompt for Milestone M7: Web UI Parity with Updated CLI
+
+**Instruction to the Agent:**
+
+Your task is to adapt the web API/UI so it matches the parity-updated CLI (including M4a changes) with at least 99% functional equivalence to Rust `taxel`.
+
+1. Align endpoints/behavior with CLI: expose `extract`, `generate`, `validate`, `send` using the same defaults and allowed values (tax type/version, print options, log-dir handling).
+2. Implement print/preview handling analogous to CLI (`validate` preview, `send` confirmation) and persist validation/server responses to the same filenames/locations per request.
+3. Honor CLI env/config conventions (e.g., `ERIC_HOME`, certificate/PIN env vars) without leaking secrets; ensure per-request ERiC state isolation and temp/log cleanup.
+4. Update UI labels/help to reflect the new commands/flags/defaults.
+5. Add/adjust e2e/API tests that compare web responses and log artifacts to the CLI outputs for shared fixtures, covering extract/generate/validate/send with print/preview variants.
+
+**Committing Your Work:**
+Once you have successfully completed this milestone, create one or more Git commits.
+- Use the Conventional Commits format (e.g., `feat(web): ...`, `test(web): ...`, `docs(web): ...`).
+- If the milestone involved multiple distinct changes, consider creating separate, logical commits.
+- Your commit message(s) should clearly describe the work you have done for this milestone.
+
+---
