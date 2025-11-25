@@ -43,6 +43,37 @@ def test_generate_cli(tmp_path: Path):
     assert result.returncode == 0, result.stderr
     assert output.exists()
 
+def test_extract_cli(tmp_path: Path):
+    xml_file = (
+        REPO_ROOT
+        / "taxel"
+        / "test_data"
+        / "taxonomy"
+        / "v6.5"
+        / "sample_expected.xml"
+    )
+    output = tmp_path / "out.csv"
+
+    result = subprocess.run(
+        [
+            PYTHON,
+            "-m",
+            "pytaxel.cli.main",
+            "extract",
+            "--xml-file",
+            str(xml_file),
+            "--output-file",
+            str(output),
+        ],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        env={"PYTHONPATH": str(REPO_ROOT), **os.environ},
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert output.exists()
+
 
 def test_validate_cli_success(tmp_path: Path):
     src = (

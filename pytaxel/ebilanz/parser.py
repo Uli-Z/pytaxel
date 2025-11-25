@@ -43,9 +43,9 @@ def parse_csv(path: Path) -> EBilanz:
             positions.append(Position(tag=tag, value=value, context=context))
 
     if master_data_kwargs["stichtag"] is None:
-        raise ValueError("Missing required master data: ebilanz:stichtag")
+        master_data_kwargs["stichtag"] = ""
     if master_data_kwargs["identifier"] is None:
-        raise ValueError("Missing required master data: identifier")
+        master_data_kwargs["identifier"] = ""
 
     master = MasterData(
         stichtag=master_data_kwargs["stichtag"],
