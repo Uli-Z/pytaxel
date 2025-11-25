@@ -10,7 +10,6 @@ from . import loader
 from .types import (
     EricFortschrittCallback,
     EricLogCallback,
-    EricPdfCallback,
     EricRueckgabepufferHandle,
     EricTransferHandle,
     EricZertifikatHandle,

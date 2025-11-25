@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import csv
 from pathlib import Path
-from typing import Iterable, List
+from typing import List
 
 from .model import EBilanz, MasterData, Position
 
