@@ -587,6 +587,34 @@ Agent checklist (M7 – Web UI parity)
 - You are done with M7 when:
   - web interactions produce the same observable results (including log files and ERiC codes) as the parity CLI for reference fixtures/tests.
 
+Legal & distribution considerations
+-----------------------------------
+- Open-source code vs. proprietary ERiC:
+  - The `pytaxel` source code is intended to be open source (e.g., MIT/Apache-2.0), while ERiC remains proprietary software owned by the Bayerisches Landesamt für Steuern and governed by its own license terms.
+  - The public repository should clearly separate the licensing of `pytaxel` from ERiC and state that ERiC is not included in the open-source license and must be obtained and used under the official ERiC license.
+- ERiC artifacts in the repository:
+  - For a public GitHub repository, it is safer to avoid bundling ERiC binaries and documentation PDFs; instead, users are instructed to download ERiC from the official source and configure `ERIC_HOME`/paths accordingly.
+  - If ERiC artifacts are kept in the repository (e.g., for development convenience), the repository may need to remain private or restricted, and contributors must respect the ERiC license (no further redistribution beyond what is explicitly allowed).
+- Docker images and hosted services:
+  - There is a distinction between publishing source code and distributing container images that bundle ERiC; images that include ERiC may be treated as a redistribution of ERiC and thus fall directly under its licensing constraints.
+  - A conservative pattern is to publish Docker images that contain only the `pytaxel` code and runtime, and expect the operator to mount or supply their own ERiC installation at runtime (e.g., as a volume or via `ERIC_HOME`), accepting the ERiC license individually.
+  - When the project maintainer builds and runs a containerized web app privately (for known users) and bundles ERiC inside the image, the maintainer effectively acts as a software manufacturer/operator and must ensure this setup is compliant with the ERiC license and registration terms.
+- Manufacturer ID usage:
+  - ERiC and the developer handbook describe the concept and use of a manufacturer ID; each software manufacturer typically uses a dedicated manufacturer ID for transmissions made by their software.
+  - In the open-source `pytaxel` code, the manufacturer ID should never be hard-coded for production use; it should always be configurable (environment variables, config file, CLI flags) and defaults must clearly be test-only placeholders where applicable.
+  - For self-hosted or embedded deployments, each operator is expected to use their own manufacturer ID registered with the tax authorities; the documentation should state that a placeholder/test ID (such as 74931) is only permitted for testing and must not be used for real filings.
+  - For a centrally hosted web app provided by the maintainer, the web app will typically use the maintainer’s own manufacturer ID on the server side; this implies that the maintainer is responsible for complying with any usage restrictions tied to that ID (scope of use, user base, technical and legal obligations).
+- Web app, privacy, and liability:
+  - A hosted web app processing eBilanz data, certificates, and PINs operates in a sensitive legal and data protection environment (DSGVO/GDPR); the operator should plan for an imprint, privacy policy, and terms of use that clarify roles, responsibilities, and liability limitations.
+  - From an architectural perspective, the system should avoid storing certificates and PINs beyond what is strictly necessary, ensure that logs do not contain secrets or full tax payloads, and clean up temporary files in line with ERiC documentation and best practices.
+  - It should be made clear that the tool provides technical support for eBilanz creation and transmission but does not in itself provide tax advice; this distinction may be relevant to avoid being viewed as providing Steuerberatung without appropriate licensing.
+- Documentation for future work:
+  - Future documentation (README, dedicated legal/operations docs) should explicitly explain:
+    - how ERiC is expected to be installed and configured (paths, environment variables, Docker volumes),
+    - how manufacturer IDs are configured and which IDs may be used in tests vs. production,
+    - which components are open source and which are third-party proprietary dependencies.
+  - Before a public SaaS-like deployment or public Docker image that bundles ERiC, the project owner should review the ERiC license text and, where necessary, seek legal advice or clarification from the tax authorities regarding redistribution and hosting models.
+
 Notes for contributors
 ----------------------
 - Never commit ERiC headers or binaries beyond what already exists under `ERiC/`.
