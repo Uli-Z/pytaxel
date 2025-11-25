@@ -76,6 +76,8 @@ def _log_response(log_path: Path, result) -> None:
     if result.validation_response:
         print(f"Logging validation result to '{val_path}'")
         val_path.write_text(result.validation_response, encoding="utf-8")
+    else:
+        val_path.write_text("", encoding="utf-8")
     if result.server_response:
         print(f"Logging server reponse to '{srv_path}'")
         srv_path.write_text(result.server_response, encoding="utf-8")

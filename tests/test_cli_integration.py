@@ -89,6 +89,7 @@ def test_validate_cli_success(tmp_path: Path):
         "<HerstellerID>74931</HerstellerID>", "<HerstellerID>00000</HerstellerID>"
     )
     xml.write_text(text, encoding="utf-8")
+    log_dir = tmp_path / "logs"
 
     result = subprocess.run(
         [
@@ -102,6 +103,8 @@ def test_validate_cli_success(tmp_path: Path):
             "Bilanz",
             "--tax-version",
             "6.5",
+            "--log-dir",
+            str(log_dir),
         ],
         cwd=REPO_ROOT,
         capture_output=True,
@@ -110,3 +113,5 @@ def test_validate_cli_success(tmp_path: Path):
     )
 
     assert result.returncode == 0, result.stderr
+    assert (log_dir / "validation_response.xml").exists()
+    assert (log_dir / "server_response.xml").exists()
