@@ -418,6 +418,42 @@ Agent checklist (M4 – CLI)
   - the CLI can generate, validate, and (test-)send eBilanz XMLs via ERiC for the reference fixtures,
   - CLI tests and wrapper tests pass.
 
+M4a – CLI parity with Rust taxel
+----------------------------------------------------------------------
+
+Goal  
+Align the Python CLI behavior to ≥99% functional parity with the Rust `taxel` CLI (commands, flags, defaults, outputs).
+
+Tasks
+- Command coverage:
+  - add `extract` (XML → CSV) with the same defaults as Rust,
+  - ensure `generate` supports optional CSV input and default output directory like Rust,
+  - mirror `--verbose/--debug` flag semantics to provide comparable diagnostics.
+- Arguments & defaults:
+  - replicate tax-type/version defaults and allowed values,
+  - keep `--print` behavior (preview for validate, confirmation for send) consistent,
+  - confirm env var/config shortcuts don’t break Rust-compatible invocations.
+- Outputs and exit codes:
+  - write validation and server responses to files (same filenames) in the chosen log dir,
+  - print ERiC return codes to stdout/stderr in line with Rust,
+  - harmonize exit codes for success/error paths.
+- Tests:
+  - CLI integration tests that compare behavior/outputs (CSV/XML, log files) against the Rust CLI for shared fixtures.
+
+Deliverable (M4a)
+- Python CLI that produces the same observable behavior (commands, flags, defaults, outputs, exit codes) as Rust `taxel` for the covered flows.
+
+Agent checklist (M4a – CLI parity)
+- Before you start:
+  - Note the current deltas vs. Rust CLI in `agents_log.md`.
+- While working:
+  - Implement `extract` and align all command defaults/args to Rust.
+  - Add response logging and ERiC code printing to match Rust outputs.
+  - Update help/README snippets if flags/defaults changed.
+  - Add/adjust CLI tests that assert parity with Rust outputs for reference fixtures.
+- You are done with M4a when:
+  - generate/validate/send/extract behave the same as Rust taxel for the tested cases, and tests reflect this.
+
 M5 – Web app
 ----------------------------------------------------------------------
 

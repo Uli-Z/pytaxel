@@ -110,6 +110,31 @@ Once you have successfully completed this milestone, create one or more Git comm
 
 ---
 
+## Prompt for Milestone M4a: CLI Parity with Rust taxel
+
+**Instruction to the Agent:**
+
+Your task is to align the Python CLI with the Rust `taxel` CLI to at least 99% functional parity.
+
+1. Add the `extract` command (XML → CSV) with the same arguments and defaults as the Rust CLI.
+2. Ensure `generate` honors the Rust defaults (optional CSV, default output directory when none is provided).
+3. Mirror flags and args: `--verbose/--debug`, `--tax-type`, `--tax-version`, `--print`, log directory handling, allowed values/defaults.
+4. Replicate outputs and exit codes:
+   - write validation and server responses to files with the same filenames in the chosen log directory,
+   - print ERiC return codes in the same places/format as Rust taxel,
+   - align process exit codes for success and failure.
+5. Keep improvements allowed (e.g., env var support), but do not break Rust-compatible invocations.
+6. Add or adjust CLI integration tests that compare behavior/output (CSV/XML/log files) against the Rust CLI fixtures.
+7. Update README/help snippets if flags/defaults or new commands are added.
+
+**Committing Your Work:**
+Once you have successfully completed this milestone, create one or more Git commits.
+- Use the Conventional Commits format (e.g., `feat(cli): ...`, `test(cli): ...`, `docs(readme): ...`).
+- If the milestone involved multiple distinct changes, consider creating separate, logical commits.
+- Your commit message(s) should clearly describe the work you have done for this milestone.
+
+---
+
 ## Prompt for Milestone M5: Web App
 
 **Instruction to the Agent:**
