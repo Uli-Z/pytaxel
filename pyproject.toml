@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pytaxel"
+version = "0.1.0"
+description = "Python eBilanz tooling with ERiC integration"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "Proprietary" }
+authors = [{ name = "pytaxel maintainers" }]
+dependencies = []
+
+[project.optional-dependencies]
+web = ["fastapi", "uvicorn"]
+dev = ["pytest", "ruff", "fastapi", "uvicorn"]
+
+[project.scripts]
+pytaxel = "pytaxel.cli.main:main"
+
+[tool.setuptools.packages.find]
+include = ["pytaxel*"]
