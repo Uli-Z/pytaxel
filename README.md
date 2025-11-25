@@ -12,3 +12,10 @@
 - Validate XML: `python -m pytaxel.cli.main validate --xml-file /tmp/ebilanz.xml --tax-type Bilanz --tax-version 6.5 --log-dir /tmp/eric-logs [--print /tmp/preview.pdf]`
 - Send XML: `python -m pytaxel.cli.main send --xml-file /tmp/ebilanz.xml --tax-type Bilanz --tax-version 6.5 --certificate /path/to/cert.pfx --pin 123456 [--print /tmp/confirmation.pdf] [--log-dir /tmp/eric-logs]`
 - Add `--debug` to any command to log resolved paths and ERiC responses.
+
+## Web API (dev)
+- Start dev server (needs `fastapi` + `uvicorn` installed): `uvicorn pytaxel.web.app:app --reload`
+- Simple forms at `http://localhost:8000/` allow manual uploads for:
+  - `POST /generate` (CSV upload → XML download),
+  - `POST /validate` (XML upload → JSON result),
+  - `POST /send` (XML + certificate + PIN → JSON or PDF confirmation).
