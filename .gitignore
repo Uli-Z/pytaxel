@@ -1,1 +1,4 @@
 ERiC/
+.env
+.venv/
+.venv-markitdown/
