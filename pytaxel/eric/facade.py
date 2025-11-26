@@ -13,6 +13,7 @@ from .errors import check_eric_result
 from .loader import eric_plugin_path
 from .types import (
     EricBearbeitungFlag,
+    EricPdfCallback,
     EricTransferHandle,
     EricZertifikatHandle,
     eric_druck_parameter_t,
@@ -67,7 +68,7 @@ class EricClient:
         params.duplexDruck = 0
         params.pdfName = str(pdf_path).encode("utf-8")
         params.fussText = None
-        params.pdfCallback = None
+        params.pdfCallback = EricPdfCallback()
         params.pdfCallbackBenutzerdaten = None
         return params
 
