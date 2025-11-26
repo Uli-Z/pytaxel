@@ -21,6 +21,10 @@ A substantial portion of this repository was created using agentic-coding
 workflows with OpenAI GPT 5.1, guided by the plans in `agents_plan.md` and the
 prompt structures in `prompts.md`, and then iterated with manual review.
 
+This setup is currently tested primarily with ERiC 41.6.2.0 on Linux
+(`ERiC-41.6.2.0/Linux-x86_64`). Other ERiC versions may work but should be
+verified carefully in your own environment.
+
 ## What is eBilanz and why is it hard?
 
 eBilanz is the electronic balance sheet format used in Germany to submit
