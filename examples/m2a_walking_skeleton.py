@@ -5,13 +5,15 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-# Ensure repository root is importable when running this example directly.
+# Ensure repository root and eric-py checkout are importable when running this example directly.
 REPO_ROOT = Path(__file__).resolve().parents[1]
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
+ERIC_PY_ROOT = REPO_ROOT.parent / "eric-py"
+for path in (REPO_ROOT, ERIC_PY_ROOT):
+    if str(path) not in sys.path:
+        sys.path.insert(0, str(path))
 
-from pytaxel.eric.errors import EricError  # noqa: E402
-from pytaxel.eric.facade import EricClient  # noqa: E402
+from eric_py.errors import EricError  # noqa: E402
+from eric_py.facade import EricClient  # noqa: E402
 
 
 def main() -> int:

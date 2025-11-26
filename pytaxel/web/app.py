@@ -12,8 +12,8 @@ from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
 
 from pytaxel.ebilanz import extract_to_csv, generate_xml_from_csv
-from pytaxel.eric.errors import EricError
-from pytaxel.eric.facade import EricClient
+from eric_py.errors import EricError
+from eric_py.facade import EricClient
 
 DEFAULT_TEMPLATE = (
     Path(__file__).resolve().parents[2]

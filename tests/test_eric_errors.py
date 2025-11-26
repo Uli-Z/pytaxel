@@ -4,11 +4,13 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
+ERIC_PY_ROOT = REPO_ROOT.parent / "eric-py"
+for path in (REPO_ROOT, ERIC_PY_ROOT):
+    if str(path) not in sys.path:
+        sys.path.insert(0, str(path))
 
-from pytaxel.eric.errors import EricError, check_eric_result  # noqa: E402
-from pytaxel.eric.types import EricErrorCode  # noqa: E402
+from eric_py.errors import EricError, check_eric_result  # noqa: E402
+from eric_py.types import EricErrorCode  # noqa: E402
 
 
 def test_check_eric_result_ok_does_not_raise():

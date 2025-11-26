@@ -5,6 +5,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 PYTHON = sys.executable
 
@@ -92,6 +94,14 @@ def test_validate_cli_success(tmp_path: Path):
     log_dir = tmp_path / "logs"
     pdf_path = tmp_path / "preview.pdf"
 
+    env = dict(os.environ)
+    env["PYTHONPATH"] = f"{REPO_ROOT}:{REPO_ROOT.parent / 'eric-py'}"
+    eric_home = REPO_ROOT / "ERiC" / "Linux-x86_64"
+    if eric_home.exists():
+        env["ERIC_HOME"] = str(eric_home)
+    else:
+        pytest.skip("ERiC distribution not available for CLI validate test")
+
     result = subprocess.run(
         [
             PYTHON,
@@ -112,10 +122,32 @@ def test_validate_cli_success(tmp_path: Path):
         cwd=REPO_ROOT,
         capture_output=True,
         text=True,
-        env={"PYTHONPATH": str(REPO_ROOT), **os.environ},
+        env=env,
     )
 
     assert result.returncode == 0, result.stderr
     assert (log_dir / "validation_response.xml").exists()
     assert (log_dir / "server_response.xml").exists()
     assert pdf_path.exists()
+
+
+def test_eric_check_without_eric_home():
+    """eric-check should fail clearly when ERIC_HOME is not set."""
+    env = {k: v for k, v in os.environ.items() if k != "ERIC_HOME"}
+    env["PYTHONPATH"] = f"{REPO_ROOT}:{REPO_ROOT.parent / 'eric-py'}"
+
+    result = subprocess.run(
+        [
+            PYTHON,
+            "-m",
+            "pytaxel.cli.main",
+            "eric-check",
+        ],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        env=env,
+    )
+
+    assert result.returncode != 0
+    assert "ERIC_HOME is not set" in result.stderr

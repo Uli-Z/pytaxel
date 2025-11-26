@@ -10,7 +10,9 @@ readme = "README.md"
 requires-python = ">=3.8"
 license = { text = "Proprietary" }
 authors = [{ name = "pytaxel maintainers" }]
-dependencies = []
+dependencies = [
+    "eric-py @ git+https://github.com/Uli-Z/eric-py.git@master",
+]
 
 [project.optional-dependencies]
 web = ["fastapi", "uvicorn"]
@@ -21,3 +23,6 @@ pytaxel = "pytaxel.cli.main:main"
 
 [tool.setuptools.packages.find]
 include = ["pytaxel*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
