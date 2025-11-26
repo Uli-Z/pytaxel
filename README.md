@@ -46,11 +46,11 @@ mappings, and a small set of CLI/web commands.
 - Security/paths: certificates and PINs supplied via CLI/env (no repo storage), manufacturer ID placeholder only for tests; logging directed to user-specified directory alongside ERiC log output.
 
 ## CLI Usage
-- Extract CSV from XML: `python -m pytaxel.cli.main extract --xml-file taxel/test_data/taxonomy/v6.5/sample_expected.xml --output-file /tmp/out.csv` (defaults to current dir if not given).
-- Generate XML: `python -m pytaxel.cli.main generate --csv-file taxel/test_data/taxonomy/v6.5/sample.csv --template-file taxel/templates/elster_v11/taxonomy_v6.5/ebilanz.xml --output-file /tmp/ebilanz.xml` (`--csv-file` optional; defaults to current dir for output).
-- Validate XML: `python -m pytaxel.cli.main validate --xml-file /tmp/ebilanz.xml --tax-type Bilanz --tax-version 6.5 --log-dir /tmp/eric-logs [--print /tmp/preview.pdf]` (writes `validation_response.xml` / `server_response.xml` to log dir; default log dir is CWD).
-- Send XML: `python -m pytaxel.cli.main send --xml-file /tmp/ebilanz.xml --tax-type Bilanz --tax-version 6.5 --certificate /path/to/cert.pfx --pin 123456 [--print /tmp/confirmation.pdf] [--log-dir /tmp/eric-logs]`.
-- Add `--verbose`/`--debug` to any command to log resolved paths and ERiC responses; response code is printed like the Rust CLI.
+- Extract CSV from XML: `pytaxel extract --xml-file taxel/test_data/taxonomy/v6.5/sample_expected.xml --output-file /tmp/out.csv` (defaults to current dir if not given).
+- Generate XML: `pytaxel generate --csv-file taxel/test_data/taxonomy/v6.5/sample.csv --template-file taxel/templates/elster_v11/taxonomy_v6.5/ebilanz.xml --output-file /tmp/ebilanz.xml` (`--csv-file` optional; defaults to current dir for output).
+- Validate XML: `pytaxel validate --xml-file /tmp/ebilanz.xml --tax-type Bilanz --tax-version 6.5 --log-dir /tmp/eric-logs [--print /tmp/preview.pdf]` (writes `validation_response.xml` / `server_response.xml` to log dir; default log dir is CWD).
+- Send XML: `pytaxel send --xml-file /tmp/ebilanz.xml --tax-type Bilanz --tax-version 6.5 --certificate /path/to/cert.pfx --pin 123456 [--print /tmp/confirmation.pdf] [--log-dir /tmp/eric-logs]`.
+- Add `--verbose`/`--debug` to any command to log resolved paths and ERiC responses; response code is printed like the Rust CLI. You can also invoke the CLI via `python -m pytaxel.cli.main ...` if you prefer.
 
 ## Web API (dev)
 - Start dev server (needs `fastapi` + `uvicorn` installed): `uvicorn pytaxel.web.app:app --reload`
