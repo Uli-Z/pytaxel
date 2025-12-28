@@ -13,7 +13,7 @@ from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
 
 from pytaxel.ebilanz import extract_to_csv, generate_xml_from_csv
 from eric_py.errors import EricError
-from eric_py.facade import EricClient
+from eric_py.loader import EricLibraryLoadError
 
 DEFAULT_TEMPLATE = (
     Path(__file__).resolve().parents[2]
@@ -160,6 +160,13 @@ def validate_endpoint(
             pdf_path = Path(pdf_name)
         xml_text = tmp_xml.read_text(encoding="utf-8")
         dav = f"{tax_type}_{tax_version}"
+        
+        # Configure ERIC_HOME for this request if provided
+        if eric_home:
+            os.environ["ERIC_HOME"] = eric_home
+            
+        from eric_py.facade import EricClient
+
         with EricClient(eric_home=_env_or(eric_home, "ERIC_HOME"), log_dir=tmp_log_dir) as client:
             result = client.validate_xml(xml_text, dav, pdf_path=pdf_path)
         _log_response(tmp_log_dir, result.validation_response, result.server_response)
@@ -174,6 +181,14 @@ def validate_endpoint(
             headers = {"Content-Disposition": f'attachment; filename="{pdf_path.name}"'}
             return StreamingResponse(iter([pdf_bytes]), media_type="application/pdf", headers=headers)
         return JSONResponse(payload)
+    except (ImportError, EricLibraryLoadError) as exc:
+        return JSONResponse(
+            {
+                "code": 500,
+                "error": f"ERiC could not be initialized: {exc}. Check ERIC_HOME configuration.",
+            },
+            status_code=500,
+        )
     except EricError as exc:
         return JSONResponse(
             {"code": exc.code, "error": str(exc)}, status_code=400
@@ -223,6 +238,13 @@ def send_endpoint(
         if pdf_name:
             tmp_pdf = Path(tempfile.mkstemp(suffix=".pdf")[1])
             pdf_path = tmp_pdf
+
+        # Configure ERIC_HOME for this request if provided
+        if eric_home:
+            os.environ["ERIC_HOME"] = eric_home
+
+        from eric_py.facade import EricClient
+
         with EricClient(eric_home=_env_or(eric_home, "ERIC_HOME"), log_dir=tmp_log_dir) as client:
             result = client.send_xml(
                 xml_text,
@@ -248,6 +270,14 @@ def send_endpoint(
                 headers=headers,
             )
         return JSONResponse(response_payload)
+    except (ImportError, EricLibraryLoadError) as exc:
+        return JSONResponse(
+            {
+                "code": 500,
+                "error": f"ERiC could not be initialized: {exc}. Check ERIC_HOME configuration.",
+            },
+            status_code=500,
+        )
     except EricError as exc:
         return JSONResponse({"code": exc.code, "error": str(exc)}, status_code=400)
     except Exception as exc:  # noqa: BLE001

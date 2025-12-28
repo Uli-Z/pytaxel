@@ -10,15 +10,6 @@ from pytaxel.ebilanz import extract_to_csv, generate_xml_from_csv
 from eric_py.errors import EricError
 from eric_py.loader import EricLibraryLoadError, eric_plugin_path, load_ericapi, load_erictoolkit
 
-# EricClient imports ERiC and may fail at import time if ERIC_HOME is not set
-# or the ERiC libraries are missing. Capture that and report a friendly error.
-EricClient = None  # type: ignore[assignment]
-ERIC_CLIENT_IMPORT_ERROR: Exception | None = None
-try:
-    from eric_py.facade import EricClient  # type: ignore[no-redef]
-except Exception as exc:  # noqa: BLE001
-    ERIC_CLIENT_IMPORT_ERROR = exc
-
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="pytaxel", description="Python eBilanz tooling using ERiC")
@@ -98,9 +89,8 @@ def _log_response(log_path: Path, result) -> None:
         srv_path.write_text("", encoding="utf-8")
 
 
-def _handle_eric_client_import_error() -> int:
+def _handle_eric_import_error(exc: Exception) -> int:
     """Print a clear setup error if EricClient could not be imported."""
-    exc = ERIC_CLIENT_IMPORT_ERROR
     if isinstance(exc, EricLibraryLoadError):
         print(
             "ERiC could not be initialized.\n\n"
@@ -213,8 +203,12 @@ def cmd_validate(args: argparse.Namespace) -> int:
     dav = _taxonomy_version(args.tax_type, args.tax_version)
     try:
         log_dir = Path(args.log_dir) if args.log_dir else Path.cwd()
-        if EricClient is None:
-            return _handle_eric_client_import_error()
+        if args.eric_home:
+            import os
+
+            os.environ["ERIC_HOME"] = args.eric_home
+        from eric_py.facade import EricClient
+
         with EricClient(eric_home=args.eric_home, log_dir=log_dir) as client:
             result = client.validate_xml(xml_text, dav, pdf_path=args.pdf_name)
         _log_response(log_dir, result)
@@ -225,6 +219,8 @@ def cmd_validate(args: argparse.Namespace) -> int:
             if result.server_response:
                 print(f"[debug] Server response:\n{result.server_response}")
         return 0
+    except (ImportError, EricLibraryLoadError) as exc:
+        return _handle_eric_import_error(exc)
     except EricError as exc:
         print(f"Validation failed: {exc}", file=sys.stderr)
         return 1
@@ -239,8 +235,12 @@ def cmd_send(args: argparse.Namespace) -> int:
     dav = _taxonomy_version(args.tax_type, args.tax_version)
     try:
         log_dir = Path(args.log_dir) if args.log_dir else Path.cwd()
-        if EricClient is None:
-            return _handle_eric_client_import_error()
+        if args.eric_home:
+            import os
+
+            os.environ["ERIC_HOME"] = args.eric_home
+        from eric_py.facade import EricClient
+
         with EricClient(eric_home=args.eric_home, log_dir=log_dir) as client:
             result = client.send_xml(
                 xml_text,
@@ -257,6 +257,8 @@ def cmd_send(args: argparse.Namespace) -> int:
             if result.server_response:
                 print(f"[debug] Server response:\n{result.server_response}")
         return 0
+    except (ImportError, EricLibraryLoadError) as exc:
+        return _handle_eric_import_error(exc)
     except EricError as exc:
         print(f"Send failed: {exc}", file=sys.stderr)
         return 1

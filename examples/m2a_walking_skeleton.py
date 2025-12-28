@@ -13,7 +13,6 @@ for path in (REPO_ROOT, ERIC_PY_ROOT):
         sys.path.insert(0, str(path))
 
 from eric_py.errors import EricError  # noqa: E402
-from eric_py.facade import EricClient  # noqa: E402
 
 
 def main() -> int:
@@ -32,6 +31,9 @@ def main() -> int:
     xml_text = xml_text.replace("<HerstellerID>74931</HerstellerID>", "<HerstellerID>00000</HerstellerID>")
 
     try:
+        from eric_py.facade import EricClient
+        from eric_py.loader import EricLibraryLoadError
+
         with EricClient() as client:
             result = client.validate_xml(xml_text, datenart_version=datenart_version)
             print(f"Validation return code: {result.code}")
@@ -41,6 +43,9 @@ def main() -> int:
                 print("Server response:")
                 print(result.server_response)
         return 0
+    except (ImportError, EricLibraryLoadError) as exc:
+        print(f"ERiC could not be initialized: {exc}", file=sys.stderr)
+        return 2
     except EricError as exc:
         print(f"Validation failed: {exc}", file=sys.stderr)
         return 1
